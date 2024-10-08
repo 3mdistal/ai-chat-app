@@ -11,8 +11,6 @@
 </script>
 
 <div class="container">
-  <h1>Welcome to Tauri!</h1>
-
   <form class="row" on:submit|preventDefault={greet}>
     <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
     <button type="submit">Greet</button>
