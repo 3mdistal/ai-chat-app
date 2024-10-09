@@ -1,20 +1,64 @@
 <script lang="ts">
-  import { invoke } from "@tauri-apps/api/core";
+  import { useChat } from "@ai-sdk/svelte";
 
-  let name = "";
-  let greetMsg = "";
+  const { input, handleSubmit, messages, setMessages } = useChat();
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    greetMsg = await invoke("greet", { name });
+  function clearChat() {
+    setMessages([]);
   }
 </script>
 
-<div class="container">
-  <form class="row" on:submit|preventDefault={greet}>
-    <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
-    <button type="submit">Greet</button>
-  </form>
+<main>
+  <div class="chat-container">
+    <ul class="message-list">
+      {#each $messages as message}
+        <li>{message.role}: {message.content}</li>
+      {/each}
+    </ul>
+  </div>
 
-  <p>{greetMsg}</p>
-</div>
+  <div class="input-container">
+    <form on:submit={handleSubmit}>
+      <input bind:value={$input} />
+      <button type="submit">Send</button>
+    </form>
+    <button on:click={clearChat}>Clear Chat</button>
+  </div>
+</main>
+
+<style>
+  .chat-container {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .message-list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .input-container {
+    display: flex;
+    gap: 10px;
+  }
+
+  input {
+    flex-grow: 1;
+    padding: 5px;
+  }
+
+  button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>
