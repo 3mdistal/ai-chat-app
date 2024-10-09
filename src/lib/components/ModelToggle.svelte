@@ -73,4 +73,19 @@
   .model-name {
     font-size: 14px;
   }
+
+  @media (prefers-color-scheme: dark) {
+    .model-option {
+      background-color: #333;
+      color: #e0e0e0;
+    }
+
+    .model-option:hover {
+      background-color: #444;
+    }
+
+    input[type="radio"]:checked + .model-name {
+      color: #81c784;
+    }
+  }
 </style>

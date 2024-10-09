@@ -85,12 +85,14 @@
   .container {
     display: flex;
     flex-direction: column;
-    max-height: 100%;
+    height: 100vh;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
     box-sizing: border-box;
+    color: #333;
+    background-color: #fff;
   }
 
   .chat-container {
@@ -137,6 +139,8 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
+    background-color: #fff;
+    color: #333;
   }
 
   button {
@@ -160,5 +164,51 @@
 
   .clear-button:hover {
     background-color: #d32f2f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(body) {
+      background-color: #1a1a1a;
+    }
+
+    .container {
+      color: #e0e0e0;
+      background-color: #1a1a1a;
+    }
+
+    .chat-container {
+      background-color: #2a2a2a;
+      border-color: #444;
+    }
+
+    .user {
+      background-color: #1e3a5f;
+    }
+
+    .assistant {
+      background-color: #3a3a1e;
+    }
+
+    input {
+      background-color: #333;
+      color: #e0e0e0;
+      border-color: #555;
+    }
+
+    button {
+      background-color: #388e3c;
+    }
+
+    button:hover {
+      background-color: #2e7d32;
+    }
+
+    .clear-button {
+      background-color: #d32f2f;
+    }
+
+    .clear-button:hover {
+      background-color: #c62828;
+    }
   }
 </style>
