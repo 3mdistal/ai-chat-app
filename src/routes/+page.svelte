@@ -11,7 +11,6 @@
   import { onMount } from "svelte";
 
   let currentMessages: Message[] = [];
-  let inputElement: HTMLInputElement;
   let currentInput: string;
 
   let availableModels: Writable<LanguageModel[]> = writable([]);
@@ -83,11 +82,7 @@
 
   <div class="input-container">
     <form on:submit={handleSubmit}>
-      <input
-        bind:value={$input}
-        bind:this={inputElement}
-        placeholder="Type your message..."
-      />
+      <input bind:value={$input} placeholder="Type your message..." />
       <button type="submit">Send</button>
     </form>
     <button on:click={clearChat} class="clear-button">Clear Chat</button>
