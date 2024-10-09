@@ -22,7 +22,7 @@
 
 <div class="model-toggle">
   {#each availableModels as model}
-    <label>
+    <label class="model-option">
       <input
         type="radio"
         name="model"
@@ -30,17 +30,47 @@
         bind:group={selectedModel}
         on:change={handleChange}
       />
-      {formatModelName(model)}
+      <span class="model-name">{formatModelName(model)}</span>
     </label>
   {/each}
 </div>
 
 <style>
   .model-toggle {
-    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
   }
-  label {
-    margin-right: 10px;
+
+  .model-option {
     display: inline-block;
+    position: relative;
+    padding: 10px 15px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .model-option:hover {
+    background-color: #e0e0e0;
+  }
+
+  input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  input[type="radio"]:checked + .model-name {
+    font-weight: bold;
+    color: #4caf50;
+  }
+
+  .model-name {
+    font-size: 14px;
   }
 </style>
