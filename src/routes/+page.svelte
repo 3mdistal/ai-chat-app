@@ -54,7 +54,7 @@
       {#each $messages as message}
         <li class="message {message.role}" transition:fade>
           <strong>{message.role}:</strong>
-          {message.content}
+          {@html message.content.replace(/\n/g, "<br>")}
         </li>
       {/each}
     </ul>
