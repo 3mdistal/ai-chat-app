@@ -6,4 +6,5 @@ const google = createGoogleGenerativeAI({
 });
 
 export const geminiPro = google("gemini-1.5-pro-002");
+export const geminiFlash = google("gemini-1.5-flash-002");
 export const geminiFlash8b = google("gemini-1.5-flash-8b");

@@ -1,14 +1,25 @@
 <script lang="ts">
   import { useChat } from "@ai-sdk/svelte";
+  import ModelToggle from "$lib/components/ModelToggle.svelte";
 
-  const { input, handleSubmit, messages, setMessages } = useChat();
+  const { input, handleSubmit, messages, setMessages } = useChat({
+    initialMessages: [],
+    body: { model: "geminiPro" },
+  });
 
   function clearChat() {
     setMessages([]);
   }
+
+  function handleModelChange(event: CustomEvent<string>) {
+    const selectedModel = event.detail;
+    useChat.setBody({ model: selectedModel });
+  }
 </script>
 
 <main>
+  <ModelToggle on:modelChange={handleModelChange} />
+
   <div class="chat-container">
     <ul class="message-list">
       {#each $messages as message}
