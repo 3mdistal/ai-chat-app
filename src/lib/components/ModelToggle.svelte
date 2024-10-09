@@ -3,7 +3,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let selectedModel = "geminiPro";
+  export let selectedModel: ;
 
   function handleChange() {
     dispatch("modelChange", selectedModel);
