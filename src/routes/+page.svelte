@@ -60,8 +60,6 @@
         content: "",
       };
 
-      let isFirstChunk = true;
-
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
@@ -71,10 +69,10 @@
 
         // Clean up the chunk
         let cleanedChunk = chunk
-          .replace(/^0:/, "") // Remove leading "0:"
-          .replace(/\\n/g, "\n") // Replace escaped newlines with actual newlines
+          .replace(/0:/, "") // Remove leading "0:"
           .replace(/(?<!\\)"/g, "") // remove all unescaped quotes
-          .replace(/\\"/g, '"'); // Replace \" with " to preserve intentional quotes
+          .replace(/\\"/g, '"') // Replace \" with " to preserve intentional quotes
+          .replace(/\\n/g, "\n"); // Replace escaped newlines with actual newlines
 
         if (cleanedChunk) {
           // Check if the chunk is the finish reason
