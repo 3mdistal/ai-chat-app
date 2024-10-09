@@ -54,7 +54,10 @@
       {#each $messages as message}
         <li class="message {message.role}" transition:fade>
           <strong>{message.role}:</strong>
-          {@html message.content.replace(/\n/g, "<br>")}
+          {@html message.content
+            .replace(/\n/g, "<br>")
+            .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+            .replace(/\_(.*?)\_/g, "<i>$1</i>")}
         </li>
       {/each}
     </ul>
