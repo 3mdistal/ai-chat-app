@@ -5,33 +5,34 @@
   const dispatch = createEventDispatcher();
 
   export let selectedModel: ModelName;
+  export let availableModels: ModelName[];
 
   function handleChange() {
     dispatch("modelChange", selectedModel);
   }
+
+  // Helper function to format model name for display
+  function formatModelName(model: string): string {
+    return model
+      .split(/(?=[A-Z])/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
 </script>
 
 <div class="model-toggle">
-  <label>
-    <input
-      type="radio"
-      name="model"
-      value="geminiPro"
-      bind:group={selectedModel}
-      on:change={handleChange}
-    />
-    Gemini Pro
-  </label>
-  <label>
-    <input
-      type="radio"
-      name="model"
-      value="geminiFlash8b"
-      bind:group={selectedModel}
-      on:change={handleChange}
-    />
-    Gemini Flash 8B
-  </label>
+  {#each availableModels as model}
+    <label>
+      <input
+        type="radio"
+        name="model"
+        value={model}
+        bind:group={selectedModel}
+        on:change={handleChange}
+      />
+      {formatModelName(model)}
+    </label>
+  {/each}
 </div>
 
 <style>
@@ -40,5 +41,6 @@
   }
   label {
     margin-right: 10px;
+    display: inline-block;
   }
 </style>

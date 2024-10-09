@@ -6,8 +6,7 @@ import {
   type LanguageModel,
   type Message,
 } from "ai";
-
-export type ModelName = "geminiPro" | "geminiFlash" | "geminiFlash8b";
+import type { ModelName } from "$lib/types/ModelName";
 
 const modelMap: Record<ModelName, LanguageModel> = {
   geminiPro,
@@ -20,11 +19,11 @@ type ModelKey = keyof typeof modelMap;
 export const POST = (async ({ request }) => {
   const { messages, model } = (await request.json()) as {
     messages: Message[];
-    model: string;
+    model: ModelName;
   };
 
   const selectedModel =
-    model in modelMap ? modelMap[model as ModelKey] : geminiPro;
+    model in modelMap ? modelMap[model as ModelKey] : geminiFlash8b;
 
   const result = await streamText({
     model: selectedModel,
