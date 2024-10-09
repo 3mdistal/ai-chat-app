@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { ModelName } from "../../routes/api/chat/+server";
+  import type { ModelName } from "$lib/types/ModelName";
 
   const dispatch = createEventDispatcher();
 
