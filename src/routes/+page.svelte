@@ -78,19 +78,18 @@
 
 <style>
   .container {
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
-  }
-
-  h1 {
-    text-align: center;
-    color: #333;
+    box-sizing: border-box;
   }
 
   .chat-container {
-    height: 400px;
+    flex-grow: 1;
     overflow-y: auto;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -124,6 +123,7 @@
   .input-container {
     display: flex;
     gap: 10px;
+    padding-bottom: 10px;
   }
 
   input {
