@@ -1,8 +1,13 @@
 <script lang="ts">
   import { useChat } from "@ai-sdk/svelte";
+  import type { Message } from "ai";
   import ModelToggle from "$lib/components/ModelToggle.svelte";
   import { writable, type Writable } from "svelte/store";
   import type { ModelName } from "$lib/types/ModelName";
+
+  let currentMessages: Message[] = [];
+  let inputElement: HTMLInputElement;
+  let currentInput: string;
 
   const availableModels: ModelName[] = [
     "geminiPro",
@@ -12,16 +17,25 @@
   let currentModel: Writable<ModelName> = writable("geminiFlash8b");
 
   $: ({ input, handleSubmit, messages, setMessages } = useChat({
-    initialMessages: [],
+    initialMessages: currentMessages,
+    initialInput: currentInput,
     body: { model: $currentModel },
+    onFinish: (message, { usage, finishReason }) => {
+      console.log("Token usage: ", usage);
+      console.log("Finish reason: ", finishReason);
+    },
   }));
 
   function clearChat() {
-    setMessages([]);
+    currentMessages = [];
+    currentInput = $input;
+    setMessages(currentMessages);
   }
 
   function handleModelChange(event: CustomEvent<string>) {
+    currentMessages = [...$messages];
     const selectedModel = event.detail as ModelName;
+    currentInput = $input;
     currentModel.set(selectedModel);
   }
 </script>
@@ -43,7 +57,7 @@
 
   <div class="input-container">
     <form on:submit={handleSubmit}>
-      <input bind:value={$input} />
+      <input bind:value={$input} bind:this={inputElement} />
       <button type="submit">Send</button>
     </form>
     <button on:click={clearChat}>Clear Chat</button>
