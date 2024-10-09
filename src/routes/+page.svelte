@@ -1,9 +1,10 @@
 <script lang="ts">
   import { useChat } from "@ai-sdk/svelte";
   import ModelToggle from "$lib/components/ModelToggle.svelte";
-  import { writable } from "svelte/store";
+  import { writable, type Writable } from "svelte/store";
+  import type { ModelName } from "./api/chat/+server";
 
-  let currentModel = writable("geminiPro");
+  let currentModel: Writable<ModelName> = writable("geminiPro");
 
   $: ({ input, handleSubmit, messages, setMessages } = useChat({
     initialMessages: [],
@@ -15,13 +16,16 @@
   }
 
   function handleModelChange(event: CustomEvent<string>) {
-    const selectedModel = event.detail;
+    const selectedModel = event.detail as ModelName;
     currentModel.set(selectedModel);
   }
 </script>
 
 <main>
-  <ModelToggle on:modelChange={handleModelChange} />
+  <ModelToggle
+    selectedModel={$currentModel}
+    on:modelChange={handleModelChange}
+  />
 
   <div class="chat-container">
     <ul class="message-list">

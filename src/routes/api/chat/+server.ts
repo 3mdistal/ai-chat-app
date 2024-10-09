@@ -7,7 +7,7 @@ import {
   type Message,
 } from "ai";
 
-type ModelName = "geminiPro" | "geminiFlash" | "geminiFlash8b";
+export type ModelName = "geminiPro" | "geminiFlash" | "geminiFlash8b";
 
 const modelMap: Record<ModelName, LanguageModel> = {
   geminiPro,

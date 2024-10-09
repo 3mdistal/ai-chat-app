@@ -1,9 +1,10 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
+  import type { ModelName } from "../../routes/api/chat/+server";
 
   const dispatch = createEventDispatcher();
 
-  export let selectedModel: ;
+  export let selectedModel: ModelName;
 
   function handleChange() {
     dispatch("modelChange", selectedModel);
