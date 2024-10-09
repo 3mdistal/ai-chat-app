@@ -1,4 +1,4 @@
-import { geminiPro, geminiFlash, geminiFlash8b } from "$lib/ai-init";
+import type { ModelName } from "$lib/types/ModelName";
 import type { RequestHandler } from "@sveltejs/kit";
 import {
   convertToCoreMessages,
@@ -6,27 +6,15 @@ import {
   type LanguageModel,
   type Message,
 } from "ai";
-import type { ModelName } from "$lib/types/ModelName";
-
-const modelMap: Record<ModelName, LanguageModel> = {
-  geminiPro,
-  geminiFlash,
-  geminiFlash8b,
-};
-
-type ModelKey = keyof typeof modelMap;
 
 export const POST = (async ({ request }) => {
   const { messages, model } = (await request.json()) as {
     messages: Message[];
-    model: ModelName;
+    model: LanguageModel;
   };
 
-  const selectedModel =
-    model in modelMap ? modelMap[model as ModelKey] : geminiFlash8b;
-
   const result = await streamText({
-    model: selectedModel,
+    model: model,
     messages: convertToCoreMessages(messages),
   });
 

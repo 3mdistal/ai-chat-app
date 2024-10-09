@@ -1,21 +1,26 @@
 <script lang="ts">
   import { useChat } from "@ai-sdk/svelte";
-  import type { Message } from "ai";
+  import type { Message, LanguageModel } from "ai";
   import ModelToggle from "$lib/components/ModelToggle.svelte";
   import { writable, type Writable } from "svelte/store";
   import type { ModelName } from "$lib/types/ModelName";
   import { fade } from "svelte/transition";
+  import Settings from "$lib/components/Settings.svelte";
+  import AIInit from "$lib/components/AIInit.svelte";
+  import { geminiFlash, geminiPro, geminiFlash8b } from "$lib/stores/ai";
+  import { onMount } from "svelte";
 
   let currentMessages: Message[] = [];
   let inputElement: HTMLInputElement;
   let currentInput: string;
 
-  const availableModels: ModelName[] = [
-    "geminiPro",
-    "geminiFlash",
-    "geminiFlash8b",
-  ];
-  let currentModel: Writable<ModelName> = writable("geminiFlash8b");
+  let availableModels: Writable<LanguageModel[]> = writable([]);
+  let currentModel: Writable<LanguageModel> = writable();
+
+  onMount(() => {
+    currentModel.set($geminiFlash8b);
+    availableModels.set([$geminiFlash, $geminiPro, $geminiFlash8b]);
+  });
 
   $: ({ input, handleSubmit, messages, setMessages } = useChat({
     initialMessages: currentMessages,
@@ -38,14 +43,27 @@
     currentMessages = [...$messages];
     const selectedModel = event.detail as ModelName;
     currentInput = $input;
-    currentModel.set(selectedModel);
+
+    const selectedModelObject = $availableModels.find(
+      (model) => model.modelId === selectedModel
+    );
+    if (selectedModelObject) {
+      currentModel.set(selectedModelObject);
+    } else {
+      console.error(`Model ${selectedModel} not found in available models`);
+      return;
+    }
+
+    currentModel.set(selectedModelObject);
   }
 </script>
 
 <main class="container">
+  <AIInit />
+  <Settings />
   <ModelToggle
     selectedModel={$currentModel}
-    {availableModels}
+    availableModels={$availableModels}
     on:modelChange={handleModelChange}
   />
 

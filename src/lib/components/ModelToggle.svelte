@@ -1,14 +1,19 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { ModelName } from "$lib/types/ModelName";
+  import type { LanguageModel } from "ai";
+  import { geminiFlash, geminiPro, geminiFlash8b } from "$lib/stores/ai";
 
   const dispatch = createEventDispatcher();
 
-  export let selectedModel: ModelName;
-  export let availableModels: ModelName[];
+  export let selectedModel: LanguageModel;
+  export let availableModels: LanguageModel[] = [
+    $geminiFlash,
+    $geminiPro,
+    $geminiFlash8b,
+  ];
 
   function handleChange() {
-    dispatch("modelChange", selectedModel);
+    dispatch("modelChange", selectedModel.modelId);
   }
 
   // Helper function to format model name for display
@@ -30,7 +35,7 @@
         bind:group={selectedModel}
         on:change={handleChange}
       />
-      <span class="model-name">{formatModelName(model)}</span>
+      <span class="model-name">{formatModelName(model.modelId)}</span>
     </label>
   {/each}
 </div>
