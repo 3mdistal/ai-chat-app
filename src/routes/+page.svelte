@@ -46,7 +46,6 @@
 </script>
 
 <main class="container">
-  <h1>AI Chat App</h1>
   <GetApiKey />
   <Settings />
   <ModelToggle
