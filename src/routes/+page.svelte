@@ -77,10 +77,15 @@
 </main>
 
 <style>
+  :global(body) {
+    height: 100vh;
+    overflow: hidden;
+  }
+
   .container {
     display: flex;
     flex-direction: column;
-    max-height: 100vh;
+    max-height: 100%;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
