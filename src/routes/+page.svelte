@@ -1,30 +1,29 @@
 <script lang="ts">
   import { useChat } from "@ai-sdk/svelte";
-  import type { Message, LanguageModel } from "ai";
+  import type { Message } from "ai";
   import ModelToggle from "$lib/components/ModelToggle.svelte";
   import { writable, type Writable } from "svelte/store";
   import type { ModelName } from "$lib/types/ModelName";
   import { fade } from "svelte/transition";
   import Settings from "$lib/components/Settings.svelte";
-  import AIInit from "$lib/components/AIInit.svelte";
-  import { geminiFlash, geminiPro, geminiFlash8b } from "$lib/stores/ai";
-  import { onMount } from "svelte";
+  import GetApiKey from "$lib/components/GetApiKey.svelte";
+  import { google_api_key } from "$lib/stores/ai";
 
   let currentMessages: Message[] = [];
+  let inputElement: HTMLInputElement;
   let currentInput: string;
 
-  let availableModels: Writable<LanguageModel[]> = writable([]);
-  let currentModel: Writable<LanguageModel> = writable();
-
-  onMount(() => {
-    currentModel.set($geminiFlash8b);
-    availableModels.set([$geminiFlash, $geminiPro, $geminiFlash8b]);
-  });
+  const availableModels: ModelName[] = [
+    "geminiPro",
+    "geminiFlash",
+    "geminiFlash8b",
+  ];
+  let currentModel: Writable<ModelName> = writable("geminiFlash8b");
 
   $: ({ input, handleSubmit, messages, setMessages } = useChat({
     initialMessages: currentMessages,
     initialInput: currentInput,
-    body: { model: $currentModel },
+    body: { model: $currentModel, apiKey: $google_api_key },
     onFinish: (message, { usage, finishReason }) => {
       console.log("Token usage: ", usage);
       console.log("Finish reason: ", finishReason);
@@ -42,27 +41,17 @@
     currentMessages = [...$messages];
     const selectedModel = event.detail as ModelName;
     currentInput = $input;
-
-    const selectedModelObject = $availableModels.find(
-      (model) => model.modelId === selectedModel
-    );
-    if (selectedModelObject) {
-      currentModel.set(selectedModelObject);
-    } else {
-      console.error(`Model ${selectedModel} not found in available models`);
-      return;
-    }
-
-    currentModel.set(selectedModelObject);
+    currentModel.set(selectedModel);
   }
 </script>
 
 <main class="container">
-  <AIInit />
+  <h1>AI Chat App</h1>
+  <GetApiKey />
   <Settings />
   <ModelToggle
     selectedModel={$currentModel}
-    availableModels={$availableModels}
+    {availableModels}
     on:modelChange={handleModelChange}
   />
 
@@ -82,7 +71,11 @@
 
   <div class="input-container">
     <form on:submit={handleSubmit}>
-      <input bind:value={$input} placeholder="Type your message..." />
+      <input
+        bind:value={$input}
+        bind:this={inputElement}
+        placeholder="Type your message..."
+      />
       <button type="submit">Send</button>
     </form>
     <button on:click={clearChat} class="clear-button">Clear Chat</button>
