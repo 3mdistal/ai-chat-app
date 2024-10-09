@@ -74,13 +74,7 @@
           .replace(/^0:/, "") // Remove leading "0:"
           .replace(/\\n/g, "\n") // Replace escaped newlines with actual newlines
           .replace(/(?<!\\)"/g, "") // remove all unescaped quotes
-          .replace(/\\"/g, '"') // Replace \" with " to preserve intentional quotes
-          .trim();
-
-        if (isFirstChunk) {
-          cleanedChunk = cleanedChunk.replace(/^0/, ""); // Remove leading "0" from the first chunk
-          isFirstChunk = false;
-        }
+          .replace(/\\"/g, '"'); // Replace \" with " to preserve intentional quotes
 
         if (cleanedChunk) {
           // Check if the chunk is the finish reason
