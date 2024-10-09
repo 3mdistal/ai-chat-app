@@ -1,9 +1,12 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
+  export let models: string[] = ["geminiPro", "geminiFlash", "geminiFlash8b"];
+  export let initialModel: string = "geminiPro";
+
   const dispatch = createEventDispatcher();
 
-  let selectedModel = "geminiPro";
+  let selectedModel = initialModel;
 
   function handleChange() {
     dispatch("modelChange", selectedModel);
@@ -11,26 +14,18 @@
 </script>
 
 <div class="model-toggle">
-  <label>
-    <input
-      type="radio"
-      name="model"
-      value="geminiPro"
-      bind:group={selectedModel}
-      on:change={handleChange}
-    />
-    Gemini Pro
-  </label>
-  <label>
-    <input
-      type="radio"
-      name="model"
-      value="geminiFlash8b"
-      bind:group={selectedModel}
-      on:change={handleChange}
-    />
-    Gemini Flash 8B
-  </label>
+  {#each models as model}
+    <label>
+      <input
+        type="radio"
+        name="model"
+        value={model}
+        bind:group={selectedModel}
+        on:change={handleChange}
+      />
+      {model}
+    </label>
+  {/each}
 </div>
 
 <style>
@@ -39,5 +34,6 @@
   }
   label {
     margin-right: 10px;
+    display: inline-block;
   }
 </style>
